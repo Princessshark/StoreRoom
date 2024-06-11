@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .sphere-container {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: black;
+        }
+
+        .sphere {
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle at center, #ff4800, #ffaa00);
+            border-radius: 50%;
+            transition: transform 0.3s; /* Remove the background-color transition */
+            box-shadow: 0 0 201px rgba(255, 255, 0, 0.5);
+        }
+
+        .sphere.scale-2 {
+            width: 10000px;
+            height: 10000px;
+	background-color: #ff0000;
+	}
+
+        .sphere.scale-3 {
+            width: 5px;
+            height: 5px;
+        }
+
+        .sphere.scale-4 {
+            width: 5px;
+            height: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sphere-container">
+        <div class="sphere"></div>
+    </div>
+
+    <script>
+        const sphere = document.querySelector('.sphere');
+        let scale = 1;
+
+        sphere.addEventListener('click', function() {
+            if (scale < 5) {
+                scale++;
+                sphere.classList.add('scale-' + scale);
+            }
+        });
+    </script>
+</body>
+</html>
+
