@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ocean Fresh Fish Market</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Color Palette Variables */
+        :root {
+            --primary: #c28b27;    /* Rich golden yellow */
+            --secondary: #386433;  /* Deep forest green */
+            --ternary: #382312;    /* Warm dark brown */
+            --text: #FFFFFF;       /* Pure white */
+        }
+
+        /* Base Typography and Layout */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--ternary);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Custom Color Classes */
+        .primary-bg { background-color: var(--primary); }
+        .secondary-bg { background-color: var(--secondary); }
+        .ternary-bg { background-color: var(--ternary); }
+        .primary-text { color: var(--primary); }
+        .secondary-text { color: var(--secondary); }
+
+        /* Hero Section Styling */
+        .hero-gradient {
+            background: linear-gradient(135deg, var(--ternary) 0%, #2d1f0f 50%, var(--ternary) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(194, 139, 39, 0.1) 0%, transparent 50%);
+        }
+
+        /* Navigation Styling */
+        .nav-backdrop {
+            background-color: rgba(56, 35, 18, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(194, 139, 39, 0.2);
+        }
+
+        /* Product Card Animations and Styling */
+        .product-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(194, 139, 39, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .product-card:hover::before {
+            left: 100%;
+        }
+
+        .product-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(194, 139, 39, 0.25);
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        /* Button Styling */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #d4941f);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(194, 139, 39, 0.4);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-secondary:hover {
+            background-color: #4a7a44;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(56, 100, 51, 0.3);
+        }
+
+        /* Category Section Styling */
+        .category-section {
+            background: linear-gradient(180deg, transparent 0%, rgba(56, 100, 51, 0.05) 50%, transparent 100%);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Social Media Icons */
+        .social-icon {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .social-icon:hover {
+            color: var(--primary);
+            transform: scale(1.15) rotate(5deg);
+            background: rgba(194, 139, 39, 0.2);
+            border-color: var(--primary);
+        }
+
+        /* Animation Classes */
+        .fade-in {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        .fade-in-delay-1 { animation-delay: 0.2s; }
+        .fade-in-delay-2 { animation-delay: 0.4s; }
+        .fade-in-delay-3 { animation-delay: 0.6s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Cart Styling */
+        .cart-count {
+            background-color: var(--primary);
+            color: var(--ternary);
+            font-weight: 700;
+            min-width: 24px;
+            height: 24px;
+        }
+
+        .cart-modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+        }
+
+        .cart-modal-content {
+            background-color: var(--ternary);
+            border: 2px solid var(--primary);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Responsive Design Enhancements */
+        @media (max-width: 768px) {
+            .product-card:hover {
+                transform: translateY(-6px) scale(1.01);
+            }
+        }
+
+        /* Loading Animation */
+        .pulse-glow {
+            animation: pulseGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(194, 139, 39, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(194, 139, 39, 0.6); }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Navigation Header -->
+    <nav class="fixed top-0 w-full z-50 nav-backdrop">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo and Brand -->
+                <div class="flex items-center space-x-3">
+                    <div class="text-3xl">🐟</div>
+                    <h1 class="text-2xl font-bold primary-text tracking-wide">Ocean Fresh</h1>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#hero" class="hover:text-yellow-400 transition-colors duration-300 font-medium">Home</a>
+                    <a href="#products" class="hover:text-yellow-400 transition-colors duration-300 font-medium">Products</a>
+                    <a href="#about" class="hover:text-yellow-400 transition-colors duration-300 font-medium">About</a>
+                    <a href="#contact" class="hover:text-yellow-400 transition-colors duration-300 font-medium">Contact</a>
+                </div>
+                
+                <!-- Cart Button -->
+                <div class="flex items-center space-x-4">
+                    <button id="cart-btn" class="flex items-center space-x-3 btn-primary px-6 py-3 rounded-lg font-semibold">
+                        <span class="text-xl">🛒</span>
+                        <span class="hidden sm:inline">Cart</span>
+                        <span id="cart-count" class="cart-count px-2 py-1 rounded-full text-xs">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero-gradient pt-24 pb-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <div id="hero-content" class="fade-in">
+                <!-- Hero content will be dynamically generated here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Categories Section -->
+    <section id="products" class="py-20 category-section">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-5xl font-bold mb-6 primary-text">Fresh Catch Collection</h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                    Discover our premium selection of fresh, dry, and specialty fish varieties, 
+                    sourced directly from trusted fishermen and processed with the highest quality standards.
+                </p>
+            </div>
+
+            <!-- Product Categories -->
+            <div id="product-categories">
+                <!-- Categories will be dynamically generated here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-opacity-30" style="background-color: rgba(56, 100, 51, 0.1);">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center fade-in">
+                <h2 class="text-4xl font-bold mb-8 primary-text">About Ocean Fresh</h2>
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="text-left">
+                        <p class="text-xl text-gray-300 leading-relaxed mb-6">
+                            For over two decades, Ocean Fresh has been the trusted source for premium quality fish and seafood. 
+                            We work directly with local fishermen and sustainable fishing operations to bring you the freshest catch.
+                        </p>
+                        <p class="text-lg text-gray-400 leading-relaxed">
+                            Our commitment to quality, freshness, and sustainability ensures that every product meets the highest 
+                            standards for taste, nutrition, and environmental responsibility.
+                        </p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="text-center p-6 rounded-lg" style="background: rgba(255, 255, 255, 0.05);">
+                            <div class="text-3xl mb-3">🌊</div>
+                            <h3 class="font-bold text-lg mb-2">Fresh Daily</h3>
+                            <p class="text-sm text-gray-400">Delivered fresh every morning</p>
+                        </div>
+                        <div class="text-center p-6 rounded-lg" style="background: rgba(255, 255, 255, 0.05);">
+                            <div class="text-3xl mb-3">♻️</div>
+                            <h3 class="font-bold text-lg mb-2">Sustainable</h3>
+                            <p class="text-sm text-gray-400">Eco-friendly fishing practices</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer id="contact" class="py-16 border-t border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div id="footer-content" class="text-center fade-in">
+                <!-- Footer content will be dynamically generated here -->
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Modal -->
+    <div id="cart-modal" class="fixed inset-0 cart-modal-backdrop z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="cart-modal-content rounded-xl p-8 max-w-lg w-full max-h-[80vh] overflow-y-auto">
+                <!-- Modal Header -->
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-3xl font-bold primary-text">Shopping Cart</h3>
+                    <button id="close-cart" class="text-gray-400 hover:text-white text-3xl transition-colors">&times;</button>
+                </div>
+                
+                <!-- Cart Items -->
+                <div id="cart-items" class="space-y-4 mb-8 min-h-[200px]">
+                    <!-- Cart items will be displayed here -->
+                </div>
+                
+                <!-- Cart Total and Checkout -->
+                <div class="border-t border-gray-600 pt-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-2xl font-bold">Total: $<span id="cart-total">0.00</span></span>
+                    </div>
+                    <button class="w-full btn-primary py-4 rounded-lg font-semibold text-lg pulse-glow">
+                        Proceed to Checkout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== DATA ARRAYS - All content stored here for easy management =====
+        
+        // Hero Section Data
+        const heroData = {
+            title: "Premium Fresh Fish Market",
+            subtitle: "Ocean to Table Excellence",
+            description: "Experience the finest selection of fresh, dry, and premium fish varieties sourced directly from sustainable fisheries. Quality guaranteed, freshness delivered.",
+            ctaText: "Explore Our Catch"
+        };
+
+        // Product Categories Data
+        const productCategories = [
+            {
+                id: 'raw-fish',
+                name: 'Raw Fish',
+                description: 'Fresh daily catch, perfect for sashimi and cooking',
+                icon: '🐟'
+            },
+            {
+                id: 'dry-fish',
+                name: 'Dry Fish',
+                description: 'Traditional dried fish with authentic flavors',
+                icon: '🏺'
+            },
+            {
+                id: 'premium-fish',
+                name: 'Premium Fish',
+                description: 'Luxury seafood selection for special occasions',
+                icon: '👑'
+            }
+        ];
+
+        // Products Data - Organized by Category
+        const productsData = {
+            'raw-fish': [
+                {
+                    id: 1,
+                    name: "Atlantic Salmon Fillet",
+                    price: 24.99,
+                    weight: "1 lb",
+                    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' fill='%23f8f9fa'/%3E%3Cpath d='M50 150c0-50 40-80 100-80s100 30 100 80-40 80-100 80-100-30-100-80z' fill='%23FF6B6B'/%3E%3Cpath d='M70 130h160v40H70z' fill='%23FF8E8E'/%3E%3Ccircle cx='80' cy='120' r='3' fill='%23333'/%3E%3C/svg%3E",
+                    description: "Premium Atlantic salmon, rich in omega-3"
+                },
+                {
+                    id: 2,
+                    name: "Fresh Tuna Steaks",
+                    price: 32.50,
+                    weight: "1.5 lbs",
+                    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' fill='%23f8f9fa'/%3E%3Cpath d='M60 150c0-40 35-70 90-70s90 30 90 70-35 70-90 70-90-30-90-70z' fill='%23DC143C'/%3E%3Cpath d='M80 130h140v40H80z' fill='%23FF1744'/%3E%3Ccircle cx='90' cy='120' r='3' fill='%23000'/%3E%3C/svg%3E",
+                    description: "Sushi-grade yellowfin tuna steaks"
+                },
+                {
+                    id: 3,
+                    name: "Sea Bass Whole",
+                    price: 18.75,
+                    weight: "2 lbs",
+                    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' fill='%23f8f9fa'/%3E%3Cpath d='M40 150c0-35 30-60 110-60s110 25 110 60-30 60-110 60-110-25-110-60z' fill='%23C0C0C0'/%3E%3Cpath d='M60 130h180v40H60z' fill='%23E0E0E0'/%3E%3Ccircle cx='70' cy='120' r='4' fill='%23000'/%3E%3C/svg%3E",
+                    description: "Fresh Mediterranean sea bass"
+                },
+                {
+                    id: 4,
+                    name: "Red Snapper Fillet",
+                    price: 28.90,
+                    weight: "1.2 lbs",
+                    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' fill='%23f8f9fa'/%3E%3Cpath d='M45 150c0-45 35-75 105-75s105 30 105 75-35 75-105 75-105-30-105-75z' fill='%23FF4444'/%3E%3Cpath d='M65 125h170v50H65z' fill='%23FF6666'/%3E%3Ccircle cx='75' cy='115' r='3' fill='%23000'/%3E%3C/svg%3E",
+                    description: "Premium red snapper, perfect for grilling"
+                }
+            ],
+            'dry-fish': [
+                {
+                    id: 5,
+                    name: "Dried Anchovy",
+                    price: 12.99,
+                    weight: "8 oz",
+                    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' fill='%23f8f9fa'/%3E%3Cpath d='M70 150c0-20 20-35 80-35s80 15 80 35-20 35-80 35-80-15-80-35z' fill='%238B4513'/%3E%3Cpath d='M85 140h130v20H85z' fill='%23A0522D'/%3E%3Ccircle cx='95' cy='135' r='2' fill='%23000'/%3E%3C/svg%3E",
+                    description: "Traditional sun-dried anchovies"
+                },
+                {
+                    id: 6,
+                    name: "Salted Cod",
+                    price: 22.45,
+                    weight: "1 lb",
+                    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' fill='%23f8f9fa'/%3E%3Cpath d='M50 150c0-40 40-65 100-65s100 25 100 65-40 65-100 65-100-25-100-65z' fill='%23F5DEB3'/%3E%3Cpath d='M70 130h160v40H70z' fill='%23FFEBCD'/%3E%3Ccircle cx='80' cy='120' r='3' fill='%238B4513'/%3E%3C/svg%3E",
+                    description: "Premium salted Atlantic cod"
+                },
+                {
+                    id: 7,
+                    name: "Dried Mackerel",
+                    price: 16.80,
+                    weight: "12 oz",
+                    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' fill='%23f8f9fa'/%3E%3Cpath d='M55 150c0-35 35-60 95-60s95 25 95 60-35 60-95 60-95-25-95-60z' fill='%23696969'/%3E%3Cpath d='M75 125h150v50H75z' fill='%23808080'/%3E%3Ccircle cx='85' cy='115' r='3' fill='%23000'/%3E%3C/svg%3E",
+                    description: "Smoked and dried mackerel"
+                },
+                {
+                    id: 8,
+                    name: "Dried Shrimp",
+                    price: 19.25,
+                    weight: "6 oz",
+                    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' fill='%23f8f9fa'/%3E%3Cpath d='M80 120c-10 0-15 5-15 15v30c0 10 5 15 15 15h140c10 0 15-5 15-15v-30c0-10-5-15-15-15z' fill='%23FFA500'/%3E%3Cpath d='M90 140h120v20H90z' fill='%23FFB84D'/%3E%3C/svg%3E",
+                    description: "Premium dried shrimp for cooking"
+                }
+            ],
+            'premium-fish': [
+                {
+                    id: 9,
+                    name: "Lobster Tail",
+                    price: 45.99,
+                    weight: "8 oz",
+                    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' fill='%23f8f9fa'/%3E%3Cpath d='M60 120c0-20 25-30 90-30s90 10 90 30v60c0 20-25 30-90 30s-90-10-90-30z' fill='%23FF4500'/%3E%3Cpath d='M80 140h140v40H80z' fill='%23FF6347'/%3E%3Cpath d='M100 120h100v10H100zm0 20h100v10H100z' fill='%23DC143C'/%3E%3C/svg%3E",
+                    description: "Fresh Maine lobster tails"
+                },
+                {
+                    id: 10,
+                    name: "King Crab Legs",
+                    price: 89.50,
+                    weight: "2 lbs",
+                    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' fill='%23f8f9fa'/%3E%3Cpath d='M50 100h200v100H50z' fill='%23B22222'/%3E%3Cpath d='M70 120h160v60H70z' fill='%23DC143C'/%3E%3Cpath d='M80 130h140v10H80zm0 20h140v10H80zm0 20h140v10H80z' fill='%238B0000'/%3E%3C/svg%3E",
+                    description: "Alaskan king crab legs"
+                },
+                {
+                    id: 11,
+                    name: "Wagyu Tuna",
+                    price: 125.00,
+                    weight: "1 lb",
+                    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' fill='%23f8f9fa'/%3E%3Cpath d='M60 150c0-40 35-70 90-70s90 30 90 70-35 70-90 70-90-30-90-70z' fill='%23800020'/%3E%3Cpath d='M80 130h140v40H80z' fill='%23A0002A'/%3E%3Cpath d='M90 140h120v5h-120zm0 10h120v5h-120zm0 10h120v5h-120z' fill='%23FFB6C1'/%3E%3C/svg%3E",
+                    description: "Ultra-premium wagyu-grade tuna"
+                },
+                {
+                    id: 12,
+                    name: "Caviar Selection",
+                    price: 199.99,
+                    weight: "2 oz",
+                    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' fill='%23f8f9fa'/%3E%3Ccircle cx='150' cy='150' r='80' fill='%23000000'/%3E%3Ccircle cx='130' cy='130' r='8' fill='%23333'/%3E%3Ccircle cx='170' cy='130' r='8' fill='%23333'/%3E%3Ccircle cx='150' cy='170' r='8' fill='%23333'/%3E%3Ccircle cx='120' cy='160' r='6' fill='%23444'/%3E%3Ccircle cx='180' cy='160' r='6' fill='%23444'/%3E%3C/svg%3E",
+                    description: "Premium Beluga caviar selection"
+                }
+            ]
+        };
+
+        // Social Media Data
+        const socialData = [
+            { name: "Facebook", icon: "📘", url: "https://facebook.com" },
+            { name: "Instagram", icon: "📷", url: "https://instagram.com" },
+            { name: "Twitter", icon: "🐦", url: "https://twitter.com" },
+            { name: "LinkedIn", icon: "💼", url: "https://linkedin.com" }
+        ];
+
+        // Footer Data
+        const footerData = {
+            copyright: "© 2024 Ocean Fresh Fish Market. All rights reserved.",
+            tagline: "Fresh from Ocean to Your Table 🌊",
+            contact: {
+                phone: "+1 (555) 123-FISH",
+                email: "hello@oceanfresh.com",
+                address: "123 Harbor Street, Coastal City, CC 12345"
+            }
+        };
+
+        // ===== SHOPPING CART FUNCTIONALITY =====
+        let shoppingCart = [];
+
+        // ===== DYNAMIC CONTENT GENERATION FUNCTIONS =====
+
+        /**
+         * Generate Hero Section Content
+         * Creates the main hero banner with title, subtitle, and call-to-action
+         */
+        function generateHeroSection() {
+            const heroContent = document.getElementById('hero-content');
+            heroContent.innerHTML = `
+                <h1 class="text-6xl md:text-7xl font-bold mb-8 primary-text leading-tight">
+                    ${heroData.title}
+                </h1>
+                <p class="text-3xl md:text-4xl mb-8 text-gray-300 font-light">
+                    ${heroData.subtitle}
+                </p>
+                <p class="text-xl md:text-2xl mb-12 max-w-4xl mx-auto text-gray-400 leading-relaxed">
+                    ${heroData.description}
+                </p>
+                <a href="#products" class="btn-primary px-10 py-5 rounded-xl text-xl font-semibold inline-block">
+                    ${heroData.ctaText}
+                </a>
+            `;
+        }
+
+        /**
+         * Generate Product Categories and Products
+         * Creates category sections with product grids for each category
+         */
+        function generateProductCategories() {
+            const categoriesContainer = document.getElementById('product-categories');
+            categoriesContainer.innerHTML = '';
+
+            productCategories.forEach((category, categoryIndex) => {
+                const categorySection = document.createElement('div');
+                categorySection.className = `mb-20 fade-in fade-in-delay-${categoryIndex + 1}`;
+                
+                // Category Header
+                const categoryHeader = `
+                    <div class="text-center mb-12">
+                        <div class="text-6xl mb-4">${category.icon}</div>
+                        <h3 class="text-4xl font-bold mb-4 primary-text">${category.name}</h3>
+                        <p class="text-xl text-gray-400">${category.description}</p>
+                    </div>
+                `;
+
+                // Product Grid for Category
+                const categoryProducts = productsData[category.id] || [];
+                const productGrid = categoryProducts.map((product, productIndex) => `
+                    <div class="product-card rounded-2xl p-6 fade-in" style="animation-delay: ${(categoryIndex * 0.5) + (productIndex * 0.1)}s">
+                        <div class="aspect-square mb-6 rounded-xl overflow-hidden bg-gray-100">
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover">
+                        </div>
+                        <div class="space-y-4">
+                            <h4 class="text-2xl font-bold">${product.name}</h4>
+                            <p class="text-gray-400 text-lg">${product.description}</p>
+                            <div class="flex justify-between items-center text-sm text-gray-500">
+                                <span>Weight: ${product.weight}</span>
+                                <span class="primary-text font-semibold">Fresh Daily</span>
+                            </div>
+                            <div class="flex justify-between items-center pt-4">
+                                <span class="text-3xl font-bold primary-text">$${product.price}</span>
+                                <button onclick="addToCart(${product.id})" class="btn-primary px-8 py-3 rounded-lg font-semibold text-lg">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                categorySection.innerHTML = `
+                    ${categoryHeader}
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                        ${productGrid}
+                    </div>
+                `;
+
+                categoriesContainer.appendChild(categorySection);
+            });
+        }
+
+        /**
+         * Generate Footer Content
+         * Creates footer with social links, contact info, and copyright
+         */
+        function generateFooter() {
+            const footerContent = document.getElementById('footer-content');
+            
+            const socialLinks = socialData.map(social => 
+                `<a href="${social.url}" target="_blank" class="social-icon mx-3" title="${social.name}">
+                    <span class="text-2xl">${social.icon}</span>
+                </a>`
+            ).join('');
+            
+            footerContent.innerHTML = `
+                <div class="grid md:grid-cols-3 gap-12 mb-12">
+                    <div class="text-center md:text-left">
+                        <h4 class="text-2xl font-bold mb-4 primary-text">Ocean Fresh</h4>
+                        <p class="text-gray-400 leading-relaxed">
+                            Your trusted source for premium quality fish and seafood, 
+                            delivered fresh from ocean to table.
+                        </p>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="text-xl font-bold mb-4">Contact Us</h4>
+                        <div class="space-y-2 text-gray-400">
+                            <p>${footerData.contact.phone}</p>
+                            <p>${footerData.contact.email}</p>
+                            <p class="text-sm">${footerData.contact.address}</p>
+                        </div>
+                    </div>
+                    <div class="text-center md:text-right">
+                        <h4 class="text-xl font-bold mb-4">Follow Us</h4>
+                        <div class="flex justify-center md:justify-end space-x-2">
+                            ${socialLinks}
+                        </div>
+                    </div>
+                </div>
+                <div class="border-t border-gray-700 pt-8 text-center">
+                    <p class="text-gray-400 mb-2">${footerData.copyright}</p>
+                    <p class="text-gray-500 text-lg">${footerData.tagline}</p>
+                </div>
+            `;
+        }
+
+        // ===== SHOPPING CART FUNCTIONS =====
+
+        /**
+         * Add Product to Shopping Cart
+         * @param {number} productId - The ID of the product to add
+         */
+        function addToCart(productId) {
+            // Find product in all categories
+            let product = null;
+            for (const category in productsData) {
+                product = productsData[category].find(p => p.id === productId);
+                if (product) break;
+            }
+
+            if (!product) return;
+
+            // Check if item already exists in cart
+            const existingItem = shoppingCart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                shoppingCart.push({ ...product, quantity: 1 });
+            }
+            
+            updateCartDisplay();
+            showAddToCartAnimation();
+        }
+
+        /**
+         * Remove Product from Shopping Cart
+         * @param {number} productId - The ID of the product to remove
+         */
+        function removeFromCart(productId) {
+            shoppingCart = shoppingCart.filter(item => item.id !== productId);
+            updateCartDisplay();
+        }
+
+        /**
+         * Update Cart Display
+         * Updates cart count, items list, and total price
+         */
+        function updateCartDisplay() {
+            const cartCount = document.getElementById('cart-count');
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            
+            // Update cart count
+            const totalItems = shoppingCart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+            
+            // Update cart items display
+            if (shoppingCart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="text-center py-12">
+                        <div class="text-6xl mb-4">🛒</div>
+                        <p class="text-gray-400 text-xl">Your cart is empty</p>
+                        <p class="text-gray-500 mt-2">Add some fresh fish to get started!</p>
+                    </div>
+                `;
+                cartTotal.textContent = '0.00';
+                return;
+            }
+            
+            cartItems.innerHTML = shoppingCart.map(item => `
+                <div class="flex justify-between items-center py-4 border-b border-gray-600 last:border-b-0">
+                    <div class="flex-1">
+                        <h4 class="font-bold text-lg">${item.name}</h4>
+                        <p class="text-gray-400 text-sm">${item.weight} • Qty: ${item.quantity}</p>
+                    </div>
+                    <div class="text-right ml-4">
+                        <p class="font-bold text-xl primary-text">$${(item.price * item.quantity).toFixed(2)}</p>
+                        <button onclick="removeFromCart(${item.id})" class="text-red-400 text-sm hover:text-red-300 transition-colors">
+                            Remove
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Update total
+            const total = shoppingCart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            cartTotal.textContent = total.toFixed(2);
+        }
+
+        /**
+         * Show Add to Cart Animation
+         * Provides visual feedback when item is added to cart
+         */
+        function showAddToCartAnimation() {
+            const button = event.target;
+            const originalText = button.textContent;
+            const originalBg = button.style.backgroundColor;
+            
+            button.textContent = 'Added! ✓';
+            button.style.backgroundColor = '#386433';
+            button.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.backgroundColor = originalBg;
+                button.style.transform = '';
+            }, 1200);
+        }
+
+        // ===== EVENT LISTENERS AND MODAL FUNCTIONALITY =====
+
+        /**
+         * Initialize Event Listeners
+         * Sets up all interactive elements and modal functionality
+         */
+        function initializeEventListeners() {
+            // Cart modal functionality
+            const cartBtn = document.getElementById('cart-btn');
+            const cartModal = document.getElementById('cart-modal');
+            const closeCartBtn = document.getElementById('close-cart');
+
+            cartBtn.addEventListener('click', () => {
+                cartModal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            });
+
+            closeCartBtn.addEventListener('click', () => {
+                cartModal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            });
+
+            // Close modal when clicking backdrop
+            cartModal.addEventListener('click', (e) => {
+                if (e.target === cartModal) {
+                    cartModal.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Escape key to close modal
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !cartModal.classList.contains('hidden')) {
+                    cartModal.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+
+        // ===== PAGE INITIALIZATION =====
+
+        /**
+         * Initialize the Complete Page
+         * Called when DOM is fully loaded
+         */
+        function initializePage() {
+            // Generate all dynamic content
+            generateHeroSection();
+            generateProductCategories();
+            generateFooter();
+            
+            // Initialize cart display
+            updateCartDisplay();
+            
+            // Set up event listeners
+            initializeEventListeners();
+            
+            // Add loading complete class for animations
+            document.body.classList.add('loaded');
+        }
+
+        // Initialize page when DOM is ready
+        document.addEventListener('DOMContentLoaded', initializePage);
+
+        // Add some additional smooth scrolling behavior
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.style.backgroundColor = 'rgba(56, 35, 18, 0.98)';
+            } else {
+                nav.style.backgroundColor = 'rgba(56, 35, 18, 0.95)';
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97ecc48330388faa',t:'MTc1NzgyMDIyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
